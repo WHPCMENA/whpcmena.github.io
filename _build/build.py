@@ -269,7 +269,7 @@ SAFAE = person_link("Safae Bourhnane", TEAM[1][2])
 # (slug, day, month, year, title, kind line, card summary)
 EVENTS = [
     ("event-2026-06-isc", "22", "Jun", "2026", "ISC High Performance 2026", "Conference · Hamburg, Germany · 22–26 June",
-     "Our representatives shared the WHPC MENA story in several sessions and connected with Women in HPC leaders from around the world."),
+     "Two sessions: a WHPC community meet-up and Women in HPC tech talks, including Safae Bourhnane on adaptive mixed precision for energy-efficient HPC."),
     ("event-2026-04-her-hpc-journey", "21", "Apr", "2026", "Her HPC Journey: the official kick-off of WHPC MENA", "Webinar · Online · 21 April",
      "Our first webinar: three women in HPC on how they entered the field, what the work is really like, and the advice they wish they'd had."),
     ("event-2026-01-sca-hpcasia", "26", "Jan", "2026", "SCA/HPCAsia 2026", "Conference · Osaka, Japan · 26–29 January",
@@ -387,6 +387,34 @@ def supporters_strip():
         for name, _, country, url in FOUNDERS) + "</div>"
 
 
+# Photos. Upload each file to assets/img/ with exactly this name; until then a
+# placeholder shows. No rebuild is needed after uploading.
+PHOTOS = {
+    "event-2026-06-isc": ("assets/img/photo-isc-2026-speakers.jpg",
+                          "Mennatallah Samier Saleh and Safae Bourhnane at ISC High Performance 2026 in Hamburg",
+                          "Mennatallah Samier Saleh and Safae Bourhnane at ISC 2026, Hamburg."),
+    "nine-months": ("assets/img/photo-news-milestone.jpg",
+                    "The WHPC MENA community", ""),
+}
+MISSING = "this.parentElement.classList.add('is-missing')"
+
+
+def photo(key):
+    if key not in PHOTOS:
+        return ""
+    src, alt, cap = PHOTOS[key]
+    capt = f"<figcaption>{cap}</figcaption>" if cap else ""
+    return (f'<figure class="photo"><img src="{src}" alt="{escape(alt)}" loading="lazy" onerror="{MISSING}">'
+            f'<div class="photo-placeholder" aria-hidden="true">Photo coming soon</div>{capt}</figure>')
+
+
+def thumb(key):
+    if key not in PHOTOS:
+        return '<div class="tile-art" aria-hidden="true"></div>'
+    src, alt, _ = PHOTOS[key]
+    return f'<div class="tile-art thumb"><img src="{src}" alt="" loading="lazy" onerror="{MISSING}"></div>'
+
+
 def news_cards(n=3):
     out = ""
     for nid, date, cat, head, body_, rel in NEWS[:n]:
@@ -396,7 +424,7 @@ def news_cards(n=3):
         if len(text) > 170:
             text = text[:text.rfind(" ", 0, 165)] + "…"
         meta = " · ".join(x for x in (cat, date) if x)
-        out += f'<a class="card news-card" href="news.html#{nid}"><div class="tile-art" aria-hidden="true"></div><div class="tile-body"><p class="meta">{meta}</p><h3>{head}</h3><p>{text}</p><span class="more">Read more →</span></div></a>'
+        out += f'<a class="card news-card" href="news.html#{nid}">{thumb(nid)}<div class="tile-body"><p class="meta">{meta}</p><h3>{head}</h3><p>{text}</p><span class="more">Read more →</span></div></a>'
     return f'<div class="grid-3">{out}</div>'
 
 
@@ -574,7 +602,7 @@ def event_page(ev, lede, facts, prose, links=()):
         mats = f'<div class="card"><h3>Links</h3><ul class="linklist">{lis}</ul></div>'
     page(slug=slug, title=title, eyebrow="Past event", h1=title, desc=lede, lede=lede,
          body=f"""<section class="section"><div class="wrap two-col">
-  <div class="prose">{prose}</div>
+  <div class="prose">{photo(slug)}{prose}</div>
   <aside class="aside stack">
     <dl class="spec">{fact_html}</dl>
     {mats}
@@ -603,12 +631,26 @@ event_page(EVENTS[1],
 <p>The session was open to everyone, from people just discovering HPC to those already working in it. It marked the beginning of a community for women in HPC across the MENA region.</p>""")
 
 event_page(EVENTS[0],
-    "WHPC MENA delivered sessions and connected with the global Women in HPC network at ISC High Performance 2026 in Hamburg.",
-    [("Dates", "22–26 June 2026"), ("Location", "Hamburg, Germany"), ("Represented by", "Mennatallah Samier Saleh and Safae Bourhnane")],
+    "WHPC MENA spoke at two sessions and connected with the global Women in HPC network at ISC High Performance 2026 in Hamburg.",
+    [("Dates", "22–26 June 2026"), ("Location", "Hamburg, Germany"), ("Speakers", "Mennatallah Samier Saleh and Safae Bourhnane")],
     f"""<p>{MENNA} and {SAFAE} represented WHPC MENA at ISC High Performance 2026, Europe's major conference for high-performance computing.</p>
+<h2>Our sessions</h2>
+<article class="card session">
+  <h3>Finding Your People in HPC: A WHPC Community Meet-Up</h3>
+  <p class="meta">14:15–15:00 (Berlin time) · Hall H, Community Stage, ground floor</p>
+  <p>{MENNA} presented WHPC MENA's story, activities and next steps.</p>
+</article>
+<article class="card session">
+  <h3>Tech Talks by Women in HPC</h3>
+  <p class="meta">19:00–20:30 (Berlin time) · Hall H, Booth L01, ground floor</p>
+  <ul>
+    <li>{MENNA}: <em>WHPC MENA</em></li>
+    <li>{SAFAE}: <em>Adaptive Mixed Precision for Energy-Efficient High-Performance Computing</em></li>
+  </ul>
+</article>
 <h2>Highlights</h2>
 <ul>
-  <li>Shared the WHPC MENA story in several sessions.</li>
+  <li>Shared the WHPC MENA story with the international HPC community.</li>
   <li>Attended deep-dive workshops.</li>
   <li>Exchanged experiences with Women in HPC leaders from other chapters and affiliates.</li>
   <li>Met women in HPC from the MENA region and around the world.</li>
@@ -800,7 +842,7 @@ for nid, date, cat, head, body_, rel in NEWS:
     news_html += f"""<article class="card news-item" id="{nid}">
   <p class="meta">{meta}</p>
   <h2 style="font-size:var(--step-2)">{head}</h2>
-  <div class="prose">{body_}{rel_link}</div>
+  <div class="prose">{photo(nid)}{body_}{rel_link}</div>
 </article>"""
 
 page(slug="news", title="News", eyebrow="News", h1="News",

@@ -5,9 +5,7 @@ A static website for WHPC MENA (Women in High Performance Computing – Middle E
 ## Before going live
 
 1. **Google Analytics.** Runs on every page with Measurement ID `G-T6E0G7T9XZ` (set as `GA_ID` in `_build/build.py`).
-2. **LinkedIn link.** In `_build/build.py`, set `LINKEDIN` to your LinkedIn page URL, then rebuild (see below).
-3. **Example content.** Anything on a pale yellow card with a dashed border and an "Example — replace" label is a placeholder: team members, partners, institutions, jobs, events and the first news post. Replace or remove them.
-4. **Privacy policy.** Read `privacy.html` and adjust it to how you actually handle mailing-list data.
+2. **Privacy policy.** Read `privacy.html` and adjust it to how you actually handle mailing-list data.
 
 ## Editing pages
 
@@ -20,9 +18,20 @@ All pages share one header, menu and footer, defined in `_build/build.py` togeth
 
 Copy the `event-template` entry in `build.py`, give it a new slug (for example `event-2026-03-meetup`), fill in the recap, and link to it from the Past events page.
 
+## Photos
+
+Photos live in `assets/img/` and are listed in `PHOTOS` in `_build/build.py`. Until a photo file exists, its page shows a "Photo coming soon" placeholder. Upload a file with exactly the listed name and it appears on the next page load, with no rebuild needed.
+
+| File name | Where it appears |
+|---|---|
+| `photo-isc-2026-speakers.jpg` | ISC High Performance 2026 event page |
+| `photo-news-milestone.jpg` | Milestone post on the News page, and its card on the home page |
+
+Use landscape JPGs about 1600 px wide and under 500 KB. File names are case-sensitive.
+
 ## Forms
 
-The forms (mailing list, contact, mentorship, volunteering) do not use any outside service. When someone submits one, their email app opens with a message to marhaba@whpcmena.org, filled in from the form. If you later choose a form or mailing-list service, only the `data-mailto` handling in `assets/js/site.js` needs to change.
+Every "Join the mailing list" button links to the WHPC MENA Google Form (set as `JOIN_URL` in `_build/build.py`). The contact, mentorship and volunteering forms use no outside service: submitting one opens the visitor's email app with a message to marhaba@whpcmena.org, filled in from the form.
 
 ## Analytics
 
