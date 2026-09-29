@@ -1,12 +1,7 @@
 /* WHPC MENA — site behaviour
-   1. Mobile menu   2. Copy buttons   3. Email-based forms   4. Google Analytics (with consent)
-
-   ------------------------------------------------------------------
-   GOOGLE ANALYTICS SETUP
-   Paste your GA4 Measurement ID below (it looks like "G-ABC123XYZ9").
-   Until it is set, no analytics code loads and no cookie banner shows.
-   ------------------------------------------------------------------ */
-var GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+   1. Mobile menu   2. Copy buttons   3. Email-based forms   4. Analytics events
+   Google Analytics itself is loaded by the Google tag in each page's <head>
+   (Measurement ID G-T6E0G7T9XZ, set as GA_ID in _build/build.py). */
 
 var CONTACT_EMAIL = "marhaba@whpcmena.org";
 
@@ -88,46 +83,10 @@ var CONTACT_EMAIL = "marhaba@whpcmena.org";
     });
   });
 
-  /* ---------- 4. Google Analytics, loaded only after consent ---------- */
-  var KEY = "whpcmena-analytics-consent";
-  var gaReady = /^G-[A-Z0-9]{6,}$/.test(GA_MEASUREMENT_ID) && GA_MEASUREMENT_ID !== "G-XXXXXXXXXX";
-  var banner = document.getElementById("consent");
-
-  function getChoice() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-  function setChoice(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
-
-  function loadGA() {
-    if (window.__gaLoaded) return;
-    window.__gaLoaded = true;
-    var s = document.createElement("script");
-    s.async = true;
-    s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA_MEASUREMENT_ID);
-    document.head.appendChild(s);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    window.gtag("js", new Date());
-    window.gtag("config", GA_MEASUREMENT_ID);
-  }
+  /* ---------- 4. Analytics events ---------- */
   function track(name, params) {
-    if (window.gtag && window.__gaLoaded) window.gtag("event", name, params || {});
+    if (typeof window.gtag === "function") window.gtag("event", name, params || {});
   }
-
-  if (gaReady && banner) {
-    var choice = getChoice();
-    if (choice === "granted") loadGA();
-    else if (choice !== "denied") banner.hidden = false;
-
-    banner.querySelector("[data-consent='accept']").addEventListener("click", function () {
-      setChoice("granted"); banner.hidden = true; loadGA();
-    });
-    banner.querySelector("[data-consent='decline']").addEventListener("click", function () {
-      setChoice("denied"); banner.hidden = true;
-    });
-  }
-  document.querySelectorAll("[data-open-consent]").forEach(function (b) {
-    if (!gaReady) { b.hidden = true; return; }
-    b.addEventListener("click", function () { if (banner) banner.hidden = false; });
-  });
 
   // Count clicks on outbound links (e.g. LinkedIn, registration pages) once GA is on.
   document.addEventListener("click", function (e) {

@@ -19,6 +19,8 @@ SITE_URL = "https://whpcmena.org"          # used for canonical links and sitema
 EMAIL = "marhaba@whpcmena.org"
 LINKEDIN = "https://www.linkedin.com/company/whpc-mena-middle-east-north-africa/"
 WHPC_GLOBAL = "https://womeninhpc.org/"
+JOIN_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdbAp71LreJX3J3tTLnSUkDymsdUcPfvzZI6erYK8qHKr8xDA/viewform"   # mailing list sign-up (Google Form)
+GA_ID = "G-T6E0G7T9XZ"                     # Google Analytics 4 Measurement ID
 LAST_UPDATED = "29 September 2026"         # shown on the privacy policy
 
 # Top navigation: (label, page slug, [(sub-page label, slug), ...])
@@ -65,7 +67,7 @@ def header(slug):
     return f"""<a class="skip-link" href="#main">Skip to content</a>
 <div class="topbar"><div class="wrap">
   <a href="get-involved.html">Get involved</a>
-  <a href="get-involved-join.html">Mailing list</a>
+  <a href="{JOIN_URL}">Mailing list</a>
   <a href="{LINKEDIN}">LinkedIn</a>
   <a href="contact.html">Contact</a>
 </div></div>
@@ -130,17 +132,12 @@ def footer():
       <ul>
         <li><a href="code-of-conduct.html">Code of conduct</a></li>
         <li><a href="privacy.html">Privacy policy</a></li>
-        <li><button class="linkbtn" type="button" data-open-consent>Cookie settings</button></li>
       </ul>
     </div>
     <div class="stack">
       <h2 style="margin-bottom:0">Stay in touch</h2>
-      <form class="signup" id="footer-signup" data-mailto data-subject="Please add me to the WHPC MENA mailing list">
-        <label class="skip-link" for="footer-email">Email address</label>
-        <input id="footer-email" name="email" data-label="Email" type="email" placeholder="you@example.org" required autocomplete="email">
-        <button class="btn btn-sm" type="submit">Join the list</button>
-        <p class="form-status" role="status" aria-live="polite" style="flex-basis:100%"></p>
-      </form>
+      <p>Get event announcements, mentorship opportunities and news from across the region.</p>
+      <p><a class="btn btn-sm footer-join" href="{JOIN_URL}">Join the mailing list</a></p>
       <p><a href="mailto:{EMAIL}">{EMAIL}</a><br><a href="{LINKEDIN}">WHPC MENA on LinkedIn</a></p>
     </div>
   </div>
@@ -151,15 +148,7 @@ def footer():
     </div>
   </div>
 </footer>
-<div class="consent" id="consent" role="dialog" aria-label="Analytics cookies" hidden>
-  <div class="consent-inner">
-    <p>We use Google Analytics to see which pages are read and which countries visitors come from. It sets cookies only if you allow it. <a href="privacy.html">Privacy policy</a></p>
-    <div class="actions">
-      <button class="btn btn-ghost btn-sm" type="button" data-consent="decline">Decline</button>
-      <button class="btn btn-sm" type="button" data-consent="accept">Allow analytics</button>
-    </div>
-  </div>
-</div>"""
+"""
 
 
 def layout(p):
@@ -176,6 +165,14 @@ def layout(p):
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{escape(title)}</title>
   <meta name="description" content="{escape(p['desc'])}">{robots}
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', '{GA_ID}');
+  </script>
   <link rel="canonical" href="{canonical}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="WHPC MENA">
@@ -216,13 +213,13 @@ def mail_note():
 
 
 def join_band():
-    return """<section class="band">
+    return f"""<section class="band">
   <div class="wrap">
     <div class="stack" style="gap:.5rem">
       <h2>Hear about events and opportunities first</h2>
       <p>Join the WHPC MENA mailing list for event announcements, calls for speakers, scholarships and jobs across the region.</p>
     </div>
-    <a class="btn" href="get-involved-join.html">Join the mailing list</a>
+    <a class="btn" href="{JOIN_URL}">Join the mailing list</a>
   </div>
 </section>"""
 
@@ -297,7 +294,7 @@ def no_upcoming(compact=False):
     return f"""<div class="empty">
   <h3>Next event to be announced</h3>
   {extra}
-  <div class="actions"><a class="btn btn-ghost btn-sm" href="get-involved-join.html">Join the mailing list</a><a class="btn btn-ghost btn-sm" href="{LINKEDIN}">Follow on LinkedIn</a></div>
+  <div class="actions"><a class="btn btn-ghost btn-sm" href="{JOIN_URL}">Join the mailing list</a><a class="btn btn-ghost btn-sm" href="{LINKEDIN}">Follow on LinkedIn</a></div>
 </div>"""
 
 
@@ -415,7 +412,7 @@ page(slug="index", title="Home",
             <h1 class="section-title">Welcome to WHPC MENA</h1>
       <p class="lede" style="color:var(--ink)">We are the official Women in HPC affiliate for the Middle East and North Africa. We connect women working in high-performance computing, advanced computing and related fields, highlight female role models, and help the next generation into the field.</p>
       <p class="muted">Founded by NYU Abu Dhabi, MoroccoHPC, Kuwait University and KAUST, and open to everyone who wants a more inclusive computing community in the region.</p>
-      <div class="actions"><a class="btn" href="about.html">Read more about us</a><a class="btn btn-ghost" href="get-involved-join.html">Join the mailing list</a></div>
+      <div class="actions"><a class="btn" href="about.html">Read more about us</a><a class="btn btn-ghost" href="{JOIN_URL}">Join the mailing list</a></div>
     </div>
     <div class="region-card">
       <h3>Our community across the region</h3>
@@ -437,7 +434,7 @@ page(slug="index", title="Home",
         {event_card(EVENTS[0])}
         {event_card(EVENTS[1])}
       </div>
-      <div class="callout" style="background:#fff;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between"><p><strong>Next event to be announced.</strong> Join the mailing list or follow us on LinkedIn to hear first.</p><div class="actions"><a class="btn btn-sm" href="get-involved-join.html">Join the mailing list</a><a class="btn btn-ghost btn-sm" href="{LINKEDIN}">Follow on LinkedIn</a></div></div>
+      <div class="callout" style="background:#fff;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between"><p><strong>Next event to be announced.</strong> Join the mailing list or follow us on LinkedIn to hear first.</p><div class="actions"><a class="btn btn-sm" href="{JOIN_URL}">Join the mailing list</a><a class="btn btn-ghost btn-sm" href="{LINKEDIN}">Follow on LinkedIn</a></div></div>
     </div>
   </div>
 </section>
@@ -706,7 +703,7 @@ page(slug="community-jobs", title="Jobs", eyebrow="Community", h1="Jobs",
   <div class="empty">
     <h3>No openings listed right now</h3>
     <p class="muted">We share roles, PhD positions and fellowships here and with our mailing list as we hear about them.</p>
-    <a class="btn btn-ghost btn-sm" href="get-involved-join.html">Join the mailing list</a>
+    <a class="btn btn-ghost btn-sm" href="{JOIN_URL}">Join the mailing list</a>
   </div>
   <aside class="aside card"><h3>Share a job</h3><p>Hiring for an HPC or research computing role in the region? Email us the title, organisation, location, closing date and a link to the full posting.</p>
     <div class="copybox"><code>{EMAIL}</code><button class="btn btn-ghost btn-sm" type="button" data-copy="{EMAIL}">Copy</button></div></aside>
@@ -733,25 +730,14 @@ page(slug="get-involved-join", title="Join the mailing list", eyebrow="Get invol
      desc="Sign up for WHPC MENA updates on events and opportunities.",
      lede="Get event announcements, calls for speakers, scholarships and jobs from across the region.",
      body=f"""<section class="section"><div class="wrap two-col">
-  <form class="form card" id="join-form" data-mailto data-subject="Please add me to the WHPC MENA mailing list">
-    <div class="row">
-      <div class="field"><label for="join-name">Name</label><input id="join-name" name="name" data-label="Name" type="text" required autocomplete="name"></div>
-      <div class="field"><label for="join-email">Email</label><input id="join-email" name="email" data-label="Email" type="email" required autocomplete="email"></div>
-    </div>
-    <div class="row">
-      <div class="field"><label for="join-country">Country</label><input id="join-country" name="country" data-label="Country" type="text" autocomplete="country-name"></div>
-      <div class="field"><label for="join-org">Organisation</label><input id="join-org" name="organisation" data-label="Organisation" type="text" autocomplete="organization"></div>
-    </div>
-    <fieldset class="fieldset" data-label="Interested in"><legend>I'm interested in</legend>
-      <div class="checks">{interest_checks("interests", ["Events", "Mentorship", "Jobs and scholarships", "Volunteering"])}</div>
-    </fieldset>
-    {mail_note()}
-    <div><button class="btn" type="submit">Send sign-up email</button></div>
-    <p class="form-status" role="status" aria-live="polite"></p>
-  </form>
+  <div class="card stack" style="gap:1.25rem;padding:2rem">
+    <h2 style="font-size:var(--step-2)">Sign up in two minutes</h2>
+    <p>Our sign-up form asks for your name, email, current role, institution and the areas of HPC you're interested in, so we can send you updates that are relevant to you.</p>
+    <p><a class="btn" href="{JOIN_URL}">Open the sign-up form</a></p>
+    <p class="hint">The form opens in Google Forms. We use your email only to send WHPC MENA updates.</p>
+  </div>
   <aside class="aside stack">
-    <div class="callout"><p>More than 50 people across the region already get our updates. You can ask to be removed at any time by emailing us. See our <a href="privacy.html">privacy policy</a>.</p></div>
-    <p class="muted">Prefer to write yourself? Email <a href="mailto:{EMAIL}">{EMAIL}</a> with the subject “Join the list”.</p>
+    <div class="callout"><p>More than 50 people across the region already get our updates. You can ask to be removed at any time by emailing <a href="mailto:{EMAIL}">{EMAIL}</a>. See our <a href="privacy.html">privacy policy</a>.</p></div>
   </aside>
 </div></section>""")
 
@@ -882,17 +868,16 @@ page(slug="privacy", title="Privacy policy", eyebrow="Policies", h1="Privacy pol
   <h2>Who we are</h2>
   <p>This website is run by WHPC MENA, the Middle East and North Africa affiliate of Women in HPC. You can reach us at <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
   <h2>Information you send us</h2>
-  <p>The forms on this site do not store anything on the website. They open your own email app with a message addressed to us. When you send it, we receive your name, email address and whatever else you include. We use this only to reply to you, to add you to our mailing list if you asked, or to organise the activity you asked about.</p>
-  <p>We keep mailing-list details until you ask us to remove them. Email us at any time to see, correct or delete what we hold about you.</p>
+  <p><strong>Mailing list.</strong> You sign up through a Google Form, which asks for your name, email, role, institution and areas of interest. Google stores the responses on our behalf. We use them only to send you WHPC MENA updates and to understand who our community is.</p>
+  <p><strong>Other forms.</strong> The contact, mentorship and volunteering forms do not store anything on this website. They open your own email app with a message addressed to us. We use what you send only to reply to you or to organise the activity you asked about.</p>
+  <p>We keep your details until you ask us to remove them. Email us at any time to see, correct or delete what we hold about you. We never sell your information.</p>
   <h2>Analytics</h2>
-  <p>With your permission, we use Google Analytics 4 to understand how the site is used: which pages are visited, roughly which country and city visitors come from, which site referred them, and what type of device and browser they use. This helps us decide what to publish.</p>
+  <p>We use Google Analytics 4 to understand how the site is used: which pages are visited, roughly which country and city visitors come from, which site referred them, and what type of device and browser they use. This helps us decide what to publish. We cannot identify individual visitors from these reports.</p>
   <ul>
-    <li>Google Analytics loads only after you choose “Allow analytics”. If you decline, it does not load.</li>
-    <li>It sets cookies (named <code>_ga</code> and <code>_ga_*</code>) to recognise returning visitors.</li>
-    <li>Google processes this data on our behalf. Google Analytics 4 does not log or store IP addresses. See <a href="https://policies.google.com/privacy">Google's privacy policy</a>.</li>
-    <li>You can change your choice at any time with the “Cookie settings” link at the bottom of every page.</li>
+    <li>Google Analytics runs on every page and sets cookies (named <code>_ga</code> and <code>_ga_*</code>) to recognise returning visitors.</li>
+    <li>Google processes this data on our behalf. Google Analytics 4 does not log or store IP addresses. See <a href="https://policies.google.com/privacy">Google's privacy policy</a> and <a href="https://policies.google.com/technologies/partner-sites">how Google uses data from sites that use its services</a>.</li>
+    <li>To opt out, block cookies for this site in your browser settings, or install the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out browser add-on</a>.</li>
   </ul>
-  <p>Your choice itself is saved in your browser's local storage so we don't ask on every page.</p>
   <h2>Hosting and fonts</h2>
   <p>Our web host records standard technical logs, such as IP addresses and request times, to keep the site running and secure. Fonts are served from this website, not from a third-party font service.</p>
   <h2>Links to other sites</h2>

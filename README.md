@@ -4,7 +4,7 @@ A static website for WHPC MENA (Women in High Performance Computing – Middle E
 
 ## Before going live
 
-1. **Google Analytics ID.** Open `assets/js/site.js` and replace `G-XXXXXXXXXX` with your GA4 Measurement ID. Until you do, no analytics code loads and no cookie banner appears.
+1. **Google Analytics.** Runs on every page with Measurement ID `G-T6E0G7T9XZ` (set as `GA_ID` in `_build/build.py`).
 2. **LinkedIn link.** In `_build/build.py`, set `LINKEDIN` to your LinkedIn page URL, then rebuild (see below).
 3. **Example content.** Anything on a pale yellow card with a dashed border and an "Example — replace" label is a placeholder: team members, partners, institutions, jobs, events and the first news post. Replace or remove them.
 4. **Privacy policy.** Read `privacy.html` and adjust it to how you actually handle mailing-list data.
@@ -26,7 +26,7 @@ The forms (mailing list, contact, mentorship, volunteering) do not use any outsi
 
 ## Analytics
 
-Google Analytics 4 loads only after a visitor clicks "Allow analytics" in the cookie banner. Once it is running you can see, in the GA dashboard:
+Google Analytics 4 runs on every page. You can see, in the GA dashboard:
 
 - **Reports → Engagement → Pages and screens**: which pages are viewed most.
 - **Reports → User attributes → Demographic details**: visitors by country and city.

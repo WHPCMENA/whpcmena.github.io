@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Privacy policy · WHPC MENA</title>
   <meta name="description" content="How WHPC MENA handles personal information and analytics on this website.">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6E0G7T9XZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T6E0G7T9XZ');
+  </script>
   <link rel="canonical" href="https://whpcmena.org/privacy.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="WHPC MENA">
@@ -57,14 +65,12 @@
   <p>The forms on this site do not store anything on the website. They open your own email app with a message addressed to us. When you send it, we receive your name, email address and whatever else you include. We use this only to reply to you, to add you to our mailing list if you asked, or to organise the activity you asked about.</p>
   <p>We keep mailing-list details until you ask us to remove them. Email us at any time to see, correct or delete what we hold about you.</p>
   <h2>Analytics</h2>
-  <p>With your permission, we use Google Analytics 4 to understand how the site is used: which pages are visited, roughly which country and city visitors come from, which site referred them, and what type of device and browser they use. This helps us decide what to publish.</p>
+  <p>We use Google Analytics 4 to understand how the site is used: which pages are visited, roughly which country and city visitors come from, which site referred them, and what type of device and browser they use. This helps us decide what to publish. We cannot identify individual visitors from these reports.</p>
   <ul>
-    <li>Google Analytics loads only after you choose “Allow analytics”. If you decline, it does not load.</li>
-    <li>It sets cookies (named <code>_ga</code> and <code>_ga_*</code>) to recognise returning visitors.</li>
-    <li>Google processes this data on our behalf. Google Analytics 4 does not log or store IP addresses. See <a href="https://policies.google.com/privacy">Google's privacy policy</a>.</li>
-    <li>You can change your choice at any time with the “Cookie settings” link at the bottom of every page.</li>
+    <li>Google Analytics runs on every page and sets cookies (named <code>_ga</code> and <code>_ga_*</code>) to recognise returning visitors.</li>
+    <li>Google processes this data on our behalf. Google Analytics 4 does not log or store IP addresses. See <a href="https://policies.google.com/privacy">Google's privacy policy</a> and <a href="https://policies.google.com/technologies/partner-sites">how Google uses data from sites that use its services</a>.</li>
+    <li>To opt out, block cookies for this site in your browser settings, or install the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out browser add-on</a>.</li>
   </ul>
-  <p>Your choice itself is saved in your browser's local storage so we don't ask on every page.</p>
   <h2>Hosting and fonts</h2>
   <p>Our web host records standard technical logs, such as IP addresses and request times, to keep the site running and secure. Fonts are served from this website, not from a third-party font service.</p>
   <h2>Links to other sites</h2>
@@ -94,7 +100,6 @@
       <ul>
         <li><a href="code-of-conduct.html">Code of conduct</a></li>
         <li><a href="privacy.html">Privacy policy</a></li>
-        <li><button class="linkbtn" type="button" data-open-consent>Cookie settings</button></li>
       </ul>
     </div>
     <div class="stack">
@@ -115,15 +120,7 @@
     </div>
   </div>
 </footer>
-<div class="consent" id="consent" role="dialog" aria-label="Analytics cookies" hidden>
-  <div class="consent-inner">
-    <p>We use Google Analytics to see which pages are read and which countries visitors come from. It sets cookies only if you allow it. <a href="privacy.html">Privacy policy</a></p>
-    <div class="actions">
-      <button class="btn btn-ghost btn-sm" type="button" data-consent="decline">Decline</button>
-      <button class="btn btn-sm" type="button" data-consent="accept">Allow analytics</button>
-    </div>
-  </div>
-</div>
+
 <script src="assets/js/site.js" defer></script>
 </body>
 </html>
