@@ -1,7 +1,6 @@
 /* WHPC MENA — site behaviour
    1. Mobile menu   2. Copy buttons   3. Email-based forms   4. Analytics events
-   Google Analytics itself is loaded by the Google tag in each page's <head>
-   (Measurement ID G-T6E0G7T9XZ, set as GA_ID in _build/build.py). */
+*/
 
 var CONTACT_EMAIL = "marhaba@whpcmena.org";
 
