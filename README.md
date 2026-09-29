@@ -49,4 +49,4 @@ Form submissions and clicks on outside links are also recorded as events (`form_
 
 ## Fonts
 
-Bricolage Grotesque, IBM Plex Sans, IBM Plex Sans Arabic and IBM Plex Mono are included in `assets/fonts` under the SIL Open Font License. The site makes no requests to font services.
+Nunito, Nunito Sans and Noto Naskh Arabic are included in `assets/fonts` under the SIL Open Font License. The site makes no requests to font services.

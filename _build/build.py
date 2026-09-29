@@ -45,30 +45,35 @@ def section_of(slug):
     return None
 
 
-BRAND_MARK = """<svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
-  <rect width="32" height="32" rx="6" fill="var(--primary)"/>
-  <path d="M9 9H23M9 16H23M9 23H23M9 9V23M16 9V23M23 9V23" stroke="var(--primary-ink)" stroke-width="1.6" opacity="0.5"/>
-  <g fill="var(--primary-ink)"><circle cx="9" cy="9" r="2.4"/><circle cx="16" cy="9" r="2.4"/><circle cx="23" cy="9" r="2.4"/><circle cx="9" cy="16" r="2.4"/><circle cx="23" cy="16" r="2.4"/><circle cx="9" cy="23" r="2.4"/><circle cx="16" cy="23" r="2.4"/><circle cx="23" cy="23" r="2.4"/></g>
-  <circle cx="16" cy="16" r="3.4" fill="var(--accent)"/>
-</svg>"""
-
-
 def header(slug):
     sec = section_of(slug)
     items = []
-    for label, top, _ in NAV:
+    for label, top, subs in NAV:
         attrs = ""
         if slug == top:
             attrs = ' aria-current="page"'
         elif sec and sec[1] == top:
             attrs = ' class="is-section"'
-        items.append(f'<li><a href="{href(top)}"{attrs}>{label}</a></li>')
+        sub_html = ""
+        if subs:
+            sub_items = "".join(
+                f'<li><a href="{href(s)}"{" aria-current=" + chr(34) + "page" + chr(34) if s == slug else ""}>{l}</a></li>'
+                for l, s in subs)
+            sub_html = f'<ul class="submenu">{sub_items}</ul>'
+        cls = ' class="has-sub"' if subs else ""
+        items.append(f'<li{cls}><a href="{href(top)}"{attrs}>{label}</a>{sub_html}</li>')
     return f"""<a class="skip-link" href="#main">Skip to content</a>
+<div class="topbar"><div class="wrap">
+  <a href="get-involved.html">Get involved</a>
+  <a href="get-involved-join.html">Mailing list</a>
+  <a href="{LINKEDIN}">LinkedIn</a>
+  <a href="contact.html">Contact</a>
+</div></div>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html" aria-label="WHPC MENA home">
-      {BRAND_MARK}
-      <span><span class="brand-name">WHPC <span>MENA</span></span><span class="brand-sub">Women in HPC · Middle East &amp; North Africa</span></span>
+    <a class="brand" href="index.html">
+      <picture><source srcset="assets/img/logo-header.webp" type="image/webp"><img src="assets/img/logo-header.png" alt="WHPC MENA" width="187" height="112"></picture>
+      <span class="brand-sub">Women in HPC · Middle East &amp; North Africa</span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
     <nav class="main-nav" id="main-nav" aria-label="Main">
@@ -107,40 +112,42 @@ def footer():
     return f"""<footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="stack">
-      <a class="brand" href="index.html">{BRAND_MARK}<span class="brand-name">WHPC <span>MENA</span></span></a>
-      <p>A regional affiliate of <a href="{WHPC_GLOBAL}">Women in HPC</a>, supporting women in high-performance and advanced computing across the Middle East and North Africa.</p>
+      <a class="footer-logo" href="index.html"><picture><source srcset="assets/img/logo-white.webp" type="image/webp"><img src="assets/img/logo-white.png" alt="WHPC MENA" width="187" height="112"></picture></a>
+      <p>The official Middle East &amp; North Africa affiliate of <a href="{WHPC_GLOBAL}">Women in HPC</a>, supporting women in high-performance and advanced computing across the region.</p>
     </div>
     <div>
-      <h2>Explore</h2>
+      <h2>Quick links</h2>
       <ul>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="community.html">Community</a></li>
         <li><a href="get-involved.html">Get involved</a></li>
         <li><a href="news.html">News</a></li>
-        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Policies</h2>
+      <ul>
+        <li><a href="code-of-conduct.html">Code of conduct</a></li>
+        <li><a href="privacy.html">Privacy policy</a></li>
+        <li><button class="linkbtn" type="button" data-open-consent>Cookie settings</button></li>
       </ul>
     </div>
     <div class="stack">
-      <h2>Stay in touch</h2>
+      <h2 style="margin-bottom:0">Stay in touch</h2>
       <form class="signup" id="footer-signup" data-mailto data-subject="Please add me to the WHPC MENA mailing list">
         <label class="skip-link" for="footer-email">Email address</label>
         <input id="footer-email" name="email" data-label="Email" type="email" placeholder="you@example.org" required autocomplete="email">
-        <button class="btn" type="submit">Join the list</button>
+        <button class="btn btn-sm" type="submit">Join the list</button>
         <p class="form-status" role="status" aria-live="polite" style="flex-basis:100%"></p>
       </form>
-      <p>Email <a href="mailto:{EMAIL}">{EMAIL}</a><br>Follow us on <a href="{LINKEDIN}">LinkedIn</a></p>
+      <p><a href="mailto:{EMAIL}">{EMAIL}</a><br><a href="{LINKEDIN}">WHPC MENA on LinkedIn</a></p>
     </div>
   </div>
   <div class="footer-bottom">
     <div class="wrap">
       <span>© <span data-year>2026</span> WHPC MENA</span>
-      <nav aria-label="Policies">
-        <a href="code-of-conduct.html">Code of conduct</a>
-        <a href="privacy.html">Privacy policy</a>
-        <button class="linkbtn" type="button" data-open-consent>Cookie settings</button>
-        <a href="{WHPC_GLOBAL}">Women in HPC (global)</a>
-      </nav>
+      <nav aria-label="Affiliation"><a href="{WHPC_GLOBAL}">Women in HPC (global)</a></nav>
     </div>
   </div>
 </footer>
@@ -175,10 +182,14 @@ def layout(p):
   <meta property="og:title" content="{escape(title)}">
   <meta property="og:description" content="{escape(p['desc'])}">
   <meta property="og:url" content="{canonical}">
-  <meta name="theme-color" content="#0a6b6b">
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/bricolage-grotesque-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <meta property="og:image" content="{SITE_URL}/assets/img/og-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#3179b3">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/nunito-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/nunito-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -230,17 +241,17 @@ def person_link(name, url):
 # ---------------------------------------------------------------- content ---
 # Founding team (from the 2025 annual report). Add roles or institutions here.
 TEAM = [
-    ("Hadeel Albahar", "HA", "https://www.linkedin.com/in/hadeelalbahar/"),
     ("Mennatallah Samier Saleh", "MS", "https://www.linkedin.com/in/mennatallah-samier-saleh-53087aa9/"),
     ("Safae Bourhnane", "SB", "https://www.linkedin.com/in/safae-bourhnane-3261a4b5/"),
+    ("Hadeel Albahar", "HA", "https://www.linkedin.com/in/hadeelalbahar/"),
 ]
 
 # Founding institutions: (name, detail line, country, website)
 FOUNDERS = [
+    ("NYU Abu Dhabi", "New York University Abu Dhabi", "United Arab Emirates", "https://nyuad.nyu.edu/"),
+    ("MoroccoHPC", "with UM6P, Mohammed VI Polytechnic University", "Morocco", "https://www.linkedin.com/company/moroccohpc/"),
     ("Kuwait University", "", "Kuwait", "https://ku.edu.kw/"),
     ("KAUST", "King Abdullah University of Science and Technology", "Saudi Arabia", "https://www.kaust.edu.sa/"),
-    ("MoroccoHPC", "with UM6P, Mohammed VI Polytechnic University", "Morocco", "https://www.linkedin.com/company/moroccohpc/"),
-    ("NYU Abu Dhabi", "New York University Abu Dhabi", "United Arab Emirates", "https://nyuad.nyu.edu/"),
 ]
 
 COUNTRIES = ["United Arab Emirates", "Morocco", "Kuwait", "Saudi Arabia", "Tunisia", "Algeria", "Egypt"]
@@ -254,8 +265,8 @@ PANEL = [
      "Builds next-generation HPC systems and actively supports students and the growing HPC community in Tunisia."),
 ]
 
-MENNA = person_link("Mennatallah Samier Saleh", TEAM[1][2])
-SAFAE = person_link("Safae Bourhnane", TEAM[2][2])
+MENNA = person_link("Mennatallah Samier Saleh", TEAM[0][2])
+SAFAE = person_link("Safae Bourhnane", TEAM[1][2])
 
 # Past events, newest first:
 # (slug, day, month, year, title, kind line, card summary)
@@ -272,7 +283,7 @@ EVENTS = [
 def event_card(ev, cls=""):
     slug, day, mon, year, title, kind, summary = ev
     return f"""<article class="card event {cls}">
-  <div class="datebox"><span class="d">{day}</span><span class="m">{mon} {year[2:]}</span></div>
+  <div class="datebox"><span class="m">{mon}</span><span class="d">{day}</span><span class="y">{year}</span></div>
   <div class="stack" style="gap:.4rem">
     <h3><a href="{href(slug)}">{title}</a></h3>
     <p class="meta">{kind}</p>
@@ -308,7 +319,7 @@ NEWS = [
   <li>Representing the region at <a href="event-2026-01-sca-hpcasia.html">SCA/HPCAsia 2026</a> and delivering sessions at <a href="event-2026-06-isc.html">ISC High Performance 2026</a> in Hamburg.</li>
   <li>A complete visual identity, interactive regional maps and presentation materials.</li>
 </ul>
-<p>Thank you to our founding team, {person_link(*TEAM[1][::2])}, {person_link(*TEAM[2][::2])} and {person_link(*TEAM[0][::2])}, to our speakers, and to everyone who has joined us so far.</p>""", ""),
+<p>Thank you to our founding team, {person_link(*TEAM[0][::2])}, {person_link(*TEAM[1][::2])} and {person_link(*TEAM[2][::2])}, to our speakers, and to everyone who has joined us so far.</p>""", ""),
     ("isc-2026", "", "Event", "A week at ISC High Performance 2026",
      f"""<p>Our representatives {MENNA} and {SAFAE} spent an inspiring week at ISC High Performance 2026 in Hamburg, sharing the WHPC MENA story in several sessions and joining deep-dive workshops.</p>
 <p>The week was about connection: exchanging experiences with other Women in HPC leaders and meeting women in HPC from the MENA region and around the world. We came home grateful, with new ideas and a stronger commitment to building the future of HPC in our region.</p>""",
@@ -353,14 +364,6 @@ def country_chips():
     return '<ul class="chips">' + "".join(f"<li>{c}</li>" for c in COUNTRIES) + "</ul>"
 
 
-GLANCE = """<dl class="spec spec-row">
-  <div><dt>Affiliate since</dt><dd>December 2025</dd></div>
-  <div><dt>Founding institutions</dt><dd>4</dd></div>
-  <div><dt>Countries</dt><dd>7</dd></div>
-  <div><dt>Community</dt><dd>300+ LinkedIn followers</dd></div>
-</dl>"""
-
-
 # -------------------------------------------------------------------- pages ---
 PAGES = []
 
@@ -369,76 +372,92 @@ def page(**kw):
     PAGES.append(kw)
 
 
+def community_tiles():
+    tiles = [
+        ("Mentorship", "get-involved-mentorship", "Find a mentor, or share your experience as one."),
+        ("Resources", "community-resources", "Learning materials, conferences and communities in HPC."),
+        ("Jobs", "community-jobs", "HPC and research computing openings in the region."),
+        ("Volunteer", "get-involved-volunteer", "Help run events, content and outreach in your country."),
+    ]
+    return '<div class="grid">' + "".join(
+        f'<a class="card tile" href="{href(s)}"><div class="tile-art" aria-hidden="true"></div><div class="tile-body"><h3>{t}</h3><p>{d}</p><span class="more">Read more →</span></div></a>'
+        for t, s, d in tiles) + "</div>"
+
+
+def supporters_strip():
+    return '<div class="supporters">' + "".join(
+        f'<a class="supporter" href="{url}"><strong>{name}</strong><span>{country}</span></a>'
+        for name, _, country, url in FOUNDERS) + "</div>"
+
+
+def news_cards(n=3):
+    out = ""
+    for nid, date, cat, head, body_, rel in NEWS[:n]:
+        first = body_.split("</p>")[0].replace("<p>", "")
+        import re as _re
+        text = _re.sub(r"<[^>]+>", "", first)
+        if len(text) > 170:
+            text = text[:text.rfind(" ", 0, 165)] + "…"
+        meta = " · ".join(x for x in (cat, date) if x)
+        out += f'<a class="card news-card" href="news.html#{nid}"><div class="tile-art" aria-hidden="true"></div><div class="tile-body"><p class="meta">{meta}</p><h3>{head}</h3><p>{text}</p><span class="more">Read more →</span></div></a>'
+    return f'<div class="grid-3">{out}</div>'
+
+
 latest = NEWS[0]
 
 # Home ------------------------------------------------------------------------
 page(slug="index", title="Home",
      desc="WHPC MENA supports and amplifies women in high-performance computing across the Middle East and North Africa through networking, mentorship, events and outreach.",
-     top=f"""<section class="hero">
-  <div class="wrap">
-    <div class="hero-copy">
-      <p class="greeting"><span class="ar" lang="ar" dir="rtl">مرحبا</span><span class="eyebrow">Welcome to WHPC MENA</span></p>
-      <h1>Women in <em>high-performance computing</em> across the Middle East &amp; North Africa</h1>
-      <p class="lede">We are the official Women in HPC affiliate for the region. We connect women working in supercomputing, advanced computing and related fields, make their work visible, and help the next generation into the field.</p>
-      <div class="actions">
-        <a class="btn" href="get-involved-join.html">Join the mailing list</a>
-        <a class="btn btn-ghost" href="events.html">See our events</a>
-      </div>
-    </div>
-    <div class="rack" aria-label="What we do">
-      <div class="rack-label"><span>What we do</span><span>4 units</span></div>
-      <div class="unit"><span class="unit-u">U1</span><span class="led"></span><span><strong>Connect</strong><span class="desc">A regional network of women in HPC across universities, research centres and industry.</span></span></div>
-      <div class="unit"><span class="unit-u">U2</span><span class="led"></span><span><strong>Mentor</strong><span class="desc">Guidance and career support from people who have built careers in the field.</span></span></div>
-      <div class="unit"><span class="unit-u">U3</span><span class="led"></span><span><strong>Showcase</strong><span class="desc">Talks and stories that make women role models in computing visible.</span></span></div>
-      <div class="unit"><span class="unit-u">U4</span><span class="led"></span><span><strong>Advocate</strong><span class="desc">Inclusive practices and a stronger HPC ecosystem in the region.</span></span></div>
-    </div>
-  </div>
-</section>""",
-     body=f"""<section class="section" style="padding-block:2rem">
-  <div class="wrap">{GLANCE}</div>
-</section>
-<section class="section">
-  <div class="wrap grid-2" style="align-items:start">
+     top="""<section class="banner"><img src="assets/img/banner.webp" width="1584" height="396" alt="Women in High-Performance Computing, Middle East and North Africa Region. مرحباً (Welcome)"></section>""",
+     body=f"""<section class="section">
+  <div class="wrap welcome">
     <div class="stack">
-      <div class="section-head" style="margin-bottom:.25rem"><div class="stack"><p class="eyebrow">Events</p><h2>Most recent</h2></div><a href="events.html">All events →</a></div>
-      {event_card(EVENTS[0])}
-      {event_card(EVENTS[1])}
+            <h1 class="section-title">Welcome to WHPC MENA</h1>
+      <p class="lede" style="color:var(--ink)">We are the official Women in HPC affiliate for the Middle East and North Africa. We connect women working in high-performance computing, advanced computing and related fields, highlight female role models, and help the next generation into the field.</p>
+      <p class="muted">Founded by NYU Abu Dhabi, MoroccoHPC, Kuwait University and KAUST, and open to everyone who wants a more inclusive computing community in the region.</p>
+      <div class="actions"><a class="btn" href="about.html">Read more about us</a><a class="btn btn-ghost" href="get-involved-join.html">Join the mailing list</a></div>
     </div>
-    <div class="stack">
-      <div class="section-head" style="margin-bottom:.25rem"><div class="stack"><p class="eyebrow">News</p><h2>Latest</h2></div><a href="news.html">All news →</a></div>
-      <article class="card">
-        <p class="meta">{latest[2]}</p>
-        <h3><a href="news.html#{latest[0]}">{latest[3]}</a></h3>
-        <p>From a conversation at ISC 2025 to an affiliate approved by Women in HPC, four founding institutions and a community across seven countries.</p>
-        <a class="more" href="news.html#{latest[0]}">Read more →</a>
-      </article>
-      {no_upcoming(compact=True)}
-    </div>
-  </div>
-</section>
-<section class="section">
-  <div class="wrap">
-    <div class="section-head"><div class="stack"><p class="eyebrow">Find your way</p><h2>Explore WHPC MENA</h2></div></div>
-    {overview_cards([
-        ("About us", "about", "Our mission, the people behind WHPC MENA and our founding institutions.", "About WHPC MENA"),
-        ("Events", "events", "Our webinars and conference appearances, with recaps.", "Browse events"),
-        ("Community", "community", "Institutions and countries in our network, and resources for people in HPC.", "Explore the community"),
-        ("Get involved", "get-involved", "Join the mailing list, find a mentor or become one, or volunteer with us.", "Ways to take part"),
-    ])}
-  </div>
-</section>
-<section class="section">
-  <div class="wrap two-col">
-    <div class="stack">
-      <p class="eyebrow">Part of a global network</p>
-      <h2>An affiliate of Women in HPC</h2>
-      <p class="lede">Women in HPC works worldwide to improve equity, diversity and inclusion in high-performance computing. Since December 2025, WHPC MENA has been its official affiliate for the Middle East and North Africa.</p>
-      <p><a href="{WHPC_GLOBAL}">Visit Women in HPC (global) →</a></p>
-    </div>
-    <div class="stack" style="gap:.75rem">
-      <p class="eyebrow">Our community spans</p>
+    <div class="region-card">
+      <h3>Our community across the region</h3>
       {country_chips()}
+      <dl class="stats">
+        <div><dt>Affiliate since</dt><dd>Dec 2025</dd></div>
+        <div><dt>Countries</dt><dd>7</dd></div>
+        <div><dt>Founding institutions</dt><dd>4</dd></div>
+        <div><dt>LinkedIn followers</dt><dd>300+</dd></div>
+      </dl>
     </div>
+  </div>
+</section>
+<section class="section section-tint">
+  <div class="wrap">
+    <div class="section-head"><h2 class="section-title">Events</h2><a class="more" href="events.html">All events →</a></div>
+    <div class="stack">
+      <div class="grid-2">
+        {event_card(EVENTS[0])}
+        {event_card(EVENTS[1])}
+      </div>
+      <div class="callout" style="background:#fff;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between"><p><strong>Next event to be announced.</strong> Join the mailing list or follow us on LinkedIn to hear first.</p><div class="actions"><a class="btn btn-sm" href="get-involved-join.html">Join the mailing list</a><a class="btn btn-ghost btn-sm" href="{LINKEDIN}">Follow on LinkedIn</a></div></div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><h2 class="section-title">Latest news</h2><a class="more" href="news.html">All news →</a></div>
+    {news_cards(3)}
+  </div>
+</section>
+<section class="section section-tint">
+  <div class="wrap">
+    <div class="section-head"><h2 class="section-title">Community</h2><a class="more" href="community.html">Explore the community →</a></div>
+    {community_tiles()}
+  </div>
+</section>
+<section class="section">
+  <div class="wrap stack-lg">
+    <div class="center stack" style="align-items:center;gap:.75rem"><h2 class="section-title">Founding institutions</h2><p class="muted">WHPC MENA is a collaboration between four institutions in four countries.</p></div>
+    {supporters_strip()}
+    <p class="center muted">An affiliate of <a href="{WHPC_GLOBAL}">Women in HPC</a>, the global organisation working to diversify high-performance computing.</p>
   </div>
 </section>
 {join_band()}""")
@@ -450,7 +469,7 @@ page(slug="about", title="About", eyebrow="About", h1="About WHPC MENA",
      body=f"""<section class="section"><div class="wrap two-col">
   <div class="prose">
     <p>We are dedicated to closing the gender gap in high-performance computing (HPC) across the Middle East and North Africa. We support and amplify women in HPC, advanced computing and related fields through networking, knowledge sharing, mentorship and outreach, shaped for the MENA context.</p>
-    <p>WHPC MENA is a collaboration between four founding institutions in four countries: Kuwait University, KAUST in Saudi Arabia, MoroccoHPC with UM6P in Morocco, and NYU Abu Dhabi in the UAE. Our community now reaches seven countries.</p>
+    <p>WHPC MENA is a collaboration between four founding institutions in four countries: NYU Abu Dhabi in the UAE, MoroccoHPC with UM6P in Morocco, Kuwait University, and KAUST in Saudi Arabia. Our community now reaches seven countries.</p>
     <p>We welcome everyone who is interested in HPC and in building a more inclusive and diverse computing ecosystem in the region.</p>
   </div>
   <aside class="callout aside"><p><strong>Affiliate of Women in HPC</strong></p><p>Approved by Women in HPC on 5 December 2025. <a href="{WHPC_GLOBAL}">Learn about Women in HPC →</a></p></aside>
@@ -544,7 +563,7 @@ page(slug="events-past", title="Past events", eyebrow="Events", h1="Past events"
      desc="Recaps from past WHPC MENA events and conference appearances.",
      lede="Recaps and highlights from our events, kept in one place.",
      body=f"""<section class="section"><div class="wrap stack">
-  <h2 class="eyebrow" style="font-size:var(--step--1)">2026</h2>
+  <h2 class="section-title" style="font-size:var(--step-2)">2026</h2>
   {past_cards}
 </div></section>""")
 
